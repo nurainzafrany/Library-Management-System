@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library System - Main Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #f2c4a5;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            height: 90px;
+            background-color: #e89c70;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 600;
+            color: #5b2c04;
+            font-family: Goudy Stout;
+        }
+
+        .content {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        .left-box {
+            background-color: #f9d9b0;
+            padding: 40px;
+            flex: 0 0 30%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .left-box h2 {
+            margin-bottom: 30px;
+            color: #5b2c04;
+        }
+
+        .total-box {
+            width: 280px;
+            height: 280px;
+            background-color: #f9d9b0;
+            border: 3px solid #a7623f;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .total-title {
+            font-size: 26px;
+            color: #5b2c04;
+        }
+
+        .total-number {
+            font-size: 38px;
+            margin-top: 10px;
+        }
+
+        .right-box {
+            flex: 0 0 70%;
+            padding: 40px;
+            background-color: #fff8ef;
+            box-sizing: border-box;
+        }
+
+        .menu-title {
+            font-size: 24px;
+            color: #5b2c04;
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .menu-title img {
+            width: 30px;
+            margin-right: 12px;
+            mix-blend-mode: multiply;
+        }
+
+        .menu-button {
+            background-color: #f9d9b0;
+            color: #5b2c04;
+            border: 2px solid #a7623f;
+            padding: 12px 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, box-shadow 0.2s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #eec99b;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .menu-button img {
+            width: 28px;
+            margin-right: 12px;
+            mix-blend-mode: multiply;
+        }
+
+        .borrowed-books {
+            margin-top: 30px;
+        }
+
+        .borrowed-books h5 {
+            color: #5b2c04;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .borrowed-books table {
+            background-color: #fce9cb;
+            font-size: 14px;
+        }
+
+        /* Table header fix */
+        .borrowed-books thead th {
+            background-color: #e89c70 !important;
+            color: #5b2c04 !important;
+        }
+
+        .profile-dropdown .btn {
+            background-color: transparent;
+            border: 2px solid #5b2c04;
+            padding: 12px 24px;
+            border-radius: 10px;
+            color: #5b2c04;
+            font-weight: bold;
+            font-size: 18px;
+            font-family: 'Georgia', 'Palatino Linotype', serif;
+        }
+
+        .profile-dropdown .dropdown-menu {
+            margin-top: 6px;
+            background-color: #f9d9b0; /* Match your theme */
+            border: 1px solid #a7623f;
+            min-width: 200px;
+            font-size: 16px;
+            font-font: 'Georgia', 'Palatino Linotype', serif;
+        }
+
+        .profile-dropdown .dropdown-item {
+            color: #5b2c04; /* Match your text color */
+            font-weight: 500;
+            padding: 10px 18px;
+        }
+
+        .profile-dropdown .dropdown-item:hover {
+            background-color: #eec99b; /* Match your menu button hover */
+        }
+
+
+
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo">Library<br>System</div>
+    <div class="dropdown profile-dropdown">
+        <button class="btn dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Profile
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+            <li><a class="dropdown-item" th:href="@{/borrower/profile}">Update Profile</a></li>
+            <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="left-box">
+        <h2>Hello, <span th:text="${borrower.borrowerUsername}">!</span></h2>
+        <div class="total-box">
+            <div class="total-title">Total Books</div>
+            <div class="total-number" th:text="${totalBooks}">0</div>
+        </div>
+    </div>
+
+    <div class="right-box">
+        <div class="menu-title">
+            <img src="/image/books.jpeg" alt="icon"> Menu
+        </div>
+
+        <a th:href="@{/borrower/store/local}" class="menu-button">
+            <img src="/image/books.jpeg" alt="icon"> Store Books
+        </a>
+
+        <a th:href="@{/borrower/fines}" class="menu-button">
+            <img src="/image/books.jpeg" alt="icon"> Check Fine
+        </a>
+
+        <div class="borrowed-books">
+            <h5>Borrowed Books:</h5>
+
+            <div th:if="${borrowedBooks != null and !borrowedBooks.isEmpty()}"
+                 style="max-height: 250px; overflow-y: auto; border: 1px solid #a7623f; border-radius: 8px;">
+                <table class="table table-striped mb-0" style="background-color: #fce9cb;">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>ISBN</th>
+                        <th>Borrow Date</th>
+                        <th>Return Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="borrow : ${borrowedBooks}">
+                        <td th:text="${borrow.book.bookTitle}">Book Title</td>
+                        <td th:text="${borrow.book.bookISBN}">ISBN</td>
+                        <td th:text="${#temporals.format(borrow.borrowDate, 'dd-MM-yyyy')}">01-01-2025</td>
+                        <td th:text="${borrow.returnDate != null} ? ${#temporals.format(borrow.returnDate, 'dd-MM-yyyy')} : 'Not returned yet'">N/A</td>
+                        <td>
+                            <form th:action="@{/borrower/borrow/delete}" method="post" style="display:inline;">
+                                <input type="hidden" name="borrowId" th:value="${borrow.borrowId}" />
+                                <button type="submit"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete this borrow record?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:if="${borrowedBooks == null or borrowedBooks.isEmpty()}">
+                <p style="color: #5b2c04;">You haven't borrowed any books yet.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

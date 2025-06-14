@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-color: #f2c4a5;
+      font-family: 'Times New Roman', serif;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background-color: #fff8f0;
+      border-radius: 16px;
+      border: 1px solid #e3b18c;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .card h1 {
+      color: #5b2c04;
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-label {
+      font-weight: bold;
+      color: #a7623f;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .btn-update {
+      background-color: #e89c70;
+      color: #5b2c04;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      width: 100%;
+    }
+
+    .btn-update:hover {
+      background-color: #d17850;
+    }
+
+    .btn-back {
+      margin-top: 15px;
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 576px) {
+      .card {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>My Profile</h1>
+  <form th:action="@{/borrower/profile}" method="post" th:object="${borrower}">
+    <div class="mb-3">
+      <label class="form-label"><i class="bi bi-person-badge"></i> Member ID</label>
+      <input type="text" class="form-control" th:field="*{borrowerId}" readonly />
+    </div>
+    <div class="mb-3">
+      <label class="form-label"><i class="bi bi-person-circle"></i> Username</label>
+      <input type="text" class="form-control" th:field="*{borrowerUsername}" readonly />
+    </div>
+    <div class="mb-3">
+      <label class="form-label"><i class="bi bi-envelope-fill"></i> Email</label>
+      <input type="email" class="form-control" th:field="*{borrowerEmail}" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label"><i class="bi bi-telephone-fill"></i> Phone No</label>
+      <input type="text" class="form-control" th:field="*{borrowerPhoneNo}" />
+    </div>
+    <button type="submit" class="btn btn-update">Save</button>
+    <a th:href="@{/borrower/mainpage}" class="btn btn-secondary btn-back">Back to Main Page</a>
+  </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Success</h5>
+      </div>
+      <div class="modal-body">
+        Your account has been updated.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  let showSuccess = /*[[${showSuccessPopup}]]*/ false;
+  if (showSuccess) {
+    let modal = new bootstrap.Modal(document.getElementById('successModal'));
+    modal.show();
+  }
+  /*]]>*/
+</script>
+
+</body>
+</html>

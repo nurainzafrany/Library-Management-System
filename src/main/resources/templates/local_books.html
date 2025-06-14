@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Store Book</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f2c4a5;
+      font-family: 'Times New Roman';
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .content-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+      gap: 40px;
+    }
+
+    .side-image {
+      height: 300px;
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.9;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+    }
+
+    .card {
+      background-color: #f9d9b0;
+      border: 3px solid #a7623f;
+      border-radius: 12px;
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+
+    .form-label i {
+      color: #5b2c04;
+    }
+
+    .form-control {
+      border-radius: 6px;
+    }
+
+    .btn-action {
+      background-color: #e89c70;
+      color: #5b2c04;
+      font-weight: bold;
+      border: 1px solid #a7623f;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-action:hover {
+      background-color: #d18b62;
+    }
+
+    .back-button-container {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+    }
+
+    .back-button {
+      background-color: #a7623f;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .back-button:hover {
+      background-color: #8c4c2c;
+      transform: scale(1.05);
+    }
+
+
+
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column;
+      }
+
+      .side-image {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="content-wrapper">
+  <!-- Left Shelf Image -->
+  <img src="/image/shelf.png" class="side-image" alt="Bookshelf Left">
+
+  <!-- Main Form -->
+  <div class="card">
+    <h2 class="mb-4 text-center"><i class="bi bi-journal-plus me-2"></i>Store Book</h2>
+    <form th:action="@{/borrower/store/local}" th:object="${book}" method="post">
+      <div class="mb-3">
+        <label class="form-label"><i class="bi bi-upc-scan me-1"></i>ISBN:</label>
+        <input type="text" th:field="*{bookISBN}" class="form-control" placeholder="ISBN" required>
+        <div th:if="${duplicateByBorrower}" class="text-danger mt-1" style="font-size: 0.9em;">
+          You already stored this book.
+        </div>
+        <div th:if="${isbnMismatch}" class="text-danger mt-1" style="font-size: 0.9em;">
+          This ISBN already exists but with different title or author.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label"><i class="bi bi-book me-1"></i>Title:</label>
+        <input type="text" th:field="*{bookTitle}" class="form-control" placeholder="Book Title" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label"><i class="bi bi-person me-1"></i>Author:</label>
+        <input type="text" th:field="*{bookAuthor}" class="form-control" placeholder="Author" required>
+      </div>
+
+      <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-action">Save and Continue</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Right Shelf Image -->
+  <img src="/image/shelf.png" class="side-image" alt="Bookshelf Right">
+</div>
+
+<div class="back-button-container">
+  <a th:href="@{/borrower/mainpage}" class="back-button">&lt;&lt; Back</a>
+</div>
+
+</body>
+</html>

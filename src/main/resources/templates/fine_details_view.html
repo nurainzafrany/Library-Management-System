@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library System - Pay Fine</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f2c4a5;
+      font-family: 'Times New Roman';
+      margin: 0;
+      padding: 0;
+    }
+
+    .content-container {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .fine-box {
+      background-color: #f9d9b0;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .fine-box h2 {
+      color: #5b2c04;
+      margin-bottom: 25px;
+      font-weight: bold;
+    }
+
+    .divider {
+      height: 3px;
+      background-color: #e89c70;
+      margin: 20px 0;
+      border-radius: 2px;
+    }
+
+    .fine-message,
+    .no-fine-message {
+      font-size: 1.3em;
+      color: #5b2c04;
+      margin-bottom: 20px;
+    }
+
+    .no-fine-message {
+      font-weight: bold;
+    }
+
+    .fine-amount {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #a7623f;
+      margin-bottom: 20px;
+    }
+
+    .fine-details-text {
+      font-size: 1.05em;
+      color: #333;
+      margin-bottom: 25px;
+    }
+
+    .fine-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 0.95em;
+    }
+
+    .fine-table th, .fine-table td {
+      border: 1px solid #d4a373;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .fine-table th {
+      background-color: #e89c70;
+      color: #5b2c04;
+      font-weight: bold;
+    }
+
+    .fine-table tr:nth-child(even) {
+      background-color: #f2e1c9;
+    }
+
+    .back-button-container {
+      margin-top: auto;
+      padding-top: 30px;
+    }
+
+    .back-button {
+      background-color: #e89c70;
+      color: #5b2c04;
+      border: 1px solid #a7623f;
+      padding: 10px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #a7623f;
+      color: white;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .icon {
+      font-size: 1.3em;
+      vertical-align: middle;
+      margin-right: 6px;
+      color: #a7623f;
+    }
+  </style>
+</head>
+<body>
+<div class="content-container">
+  <div class="fine-box">
+    <h2><i class="bi bi-cash-coin icon"></i>Fine Details</h2>
+
+    <div th:if="${totalFineAmount != null and totalFineAmount > 0}">
+      <div class="fine-message">
+        <i class="bi bi-exclamation-circle icon"></i>You have an outstanding fine:
+      </div>
+      <div class="fine-amount" th:text="'RM ' + ${#numbers.formatDecimal(totalFineAmount, 1, 2)}">RM 0.00</div>
+
+      <div class="divider"></div>
+
+      <div class="fine-details-text">
+        <p>Please settle your fine at the library counter.</p>
+        <p>For details, refer to the breakdown below:</p>
+      </div>
+
+      <table class="fine-table">
+        <thead>
+        <tr>
+          <th>Book Title</th>
+          <th>Book Author</th>
+          <th>Borrow Date</th>
+          <th>Due Date</th>
+          <th>Returned Date</th>
+          <th>Days Overdue</th>
+          <th>Fine Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="fineDetail : ${fineDetails}">
+          <td th:text="${fineDetail.bookTitle}">Book Title Example</td>
+          <td th:text="${fineDetail.bookAuthor}">Author Name Example</td>
+          <td th:text="${#temporals.format(fineDetail.borrowDate, 'dd-MM-yyyy')}">01-01-2025</td>
+          <td th:text="${#temporals.format(fineDetail.dueDate, 'dd-MM-yyyy')}">01-01-2025</td>
+          <td th:text="${fineDetail.returnedDate} != null ? ${#temporals.format(fineDetail.returnedDate, 'dd-MM-yyyy')} : 'N/A'">N/A</td>
+          <td th:text="${fineDetail.daysOverdue}">0</td>
+          <td th:text="'RM ' + ${#numbers.formatDecimal(fineDetail.fineAmountPerBook, 1, 2)}">RM 0.00</td>
+        </tr>
+        <tr th:if="${fineDetails == null or fineDetails.isEmpty()} and ${totalFineAmount != null and totalFineAmount > 0}">
+          <td colspan="7">Detailed fine breakdown is not available here, but you have a total fine.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div th:if="${totalFineAmount == null or totalFineAmount <= 0}">
+      <div class="no-fine-message">
+        <i class="bi bi-check-circle icon"></i>Great news! This specific fine has been settled or does not exist.
+      </div>
+      <div class="fine-details-text">
+        Keep up the good work of returning books on time!
+      </div>
+    </div>
+
+    <div class="back-button-container">
+      <a th:href="@{/borrower/fines}" class="back-button">
+        <i class="bi bi-arrow-left icon"></i>Back to Fine List
+      </a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
