@@ -21,5 +21,3 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/forgot-password").setViewName("forgot-password");
     }
 }
-
-//end of webconfig
